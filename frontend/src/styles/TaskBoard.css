@@ -1,0 +1,17 @@
+.task-board {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+  }
+  
+  .column {
+    background: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+    width: 30%;
+  }
+  
+  .column h3 {
+    text-align: center;
+  }
+  

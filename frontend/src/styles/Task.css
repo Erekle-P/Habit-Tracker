@@ -1,0 +1,19 @@
+.task-card {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    margin-bottom: 10px;
+    cursor: grab;
+  }
+  
+  .task-card h4 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+  }
+  
+  .task-card p {
+    font-size: 0.9rem;
+    color: #6b7280;
+  }
+  

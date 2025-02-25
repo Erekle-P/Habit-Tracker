@@ -1,0 +1,17 @@
+.chat-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .chat-container input {
+    padding: 10px;
+    margin-right: 10px;
+  }
+  
+  .chat-container button {
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+  }
+  
