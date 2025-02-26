@@ -1,60 +1,86 @@
-import { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { useEffect, useState } from "react";
+import { getTasks, updateTask } from "../api";
 
-const initialTasks = {
-  todo: [{ id: "1", content: "Task 1" }, { id: "2", content: "Task 2" }],
-  inProgress: [{ id: "3", content: "Task 3" }],
-  done: [{ id: "4", content: "Task 4" }],
-};
+function KanbanBoard() {
+  const [tasks, setTasks] = useState([]);
 
-const KanbanBoard = () => {
-  const [tasks, setTasks] = useState(initialTasks);
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
-  const handleDragEnd = (result) => {
-    if (!result.destination) return;
-
-    const sourceCol = result.source.droppableId;
-    const destCol = result.destination.droppableId;
-
-    const sourceTasks = [...tasks[sourceCol]];
-    const destTasks = [...tasks[destCol]];
-    
-    const [movedTask] = sourceTasks.splice(result.source.index, 1);
-    destTasks.splice(result.destination.index, 0, movedTask);
-
-    setTasks({
-      ...tasks,
-      [sourceCol]: sourceTasks,
-      [destCol]: destTasks,
-    });
+  const fetchTasks = async () => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const data = await getTasks(accessToken);
+      setTasks(data);
+    } catch (err) {
+      console.error("Failed to fetch tasks:", err);
+    }
   };
 
+  const moveTask = async (taskId, newStatus) => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      await updateTask(taskId, { status: newStatus }, accessToken);
+      fetchTasks();
+    } catch (err) {
+      console.error("Failed to update task status:", err);
+    }
+  };
+
+  const toDo = tasks.filter((t) => t.status === "TO_DO");
+  const inProgress = tasks.filter((t) => t.status === "IN_PROGRESS");
+  const done = tasks.filter((t) => t.status === "DONE");
+
   return (
-    <div className="kanban-container">
-      <DragDropContext onDragEnd={handleDragEnd}>
-        {Object.keys(tasks).map((col) => (
-          <Droppable key={col} droppableId={col}>
-            {(provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps} className="kanban-column">
-                <h2 className="text-xl font-bold">{col.toUpperCase()}</h2>
-                {tasks[col].map((task, index) => (
-                  <Draggable key={task.id} draggableId={task.id} index={index}>
-                    {(provided) => (
-                      <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="task-card">
-                        {task.content}
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        ))}
-      </DragDropContext>
+    <div className="p-6">
+      <h2 className="text-xl mb-4">📌 Kanban Board (Tasks)</h2>
+      <div className="flex gap-4">
+        <div className="bg-white p-4 rounded-md shadow-md w-1/3">
+          <h3 className="font-bold mb-2">To Do</h3>
+          {toDo.map((task) => (
+            <div key={task.id} className="mb-2 p-2 bg-sky-100 rounded">
+              <p>{task.title}</p>
+              <button
+                className="text-sm text-blue-600 underline"
+                onClick={() => moveTask(task.id, "IN_PROGRESS")}
+              >
+                Move to In Progress
+              </button>
+            </div>
+          ))}
+        </div>
+        <div className="bg-white p-4 rounded-md shadow-md w-1/3">
+          <h3 className="font-bold mb-2">In Progress</h3>
+          {inProgress.map((task) => (
+            <div key={task.id} className="mb-2 p-2 bg-sky-100 rounded">
+              <p>{task.title}</p>
+              <button
+                className="text-sm text-blue-600 underline"
+                onClick={() => moveTask(task.id, "DONE")}
+              >
+                Move to Done
+              </button>
+            </div>
+          ))}
+        </div>
+        <div className="bg-white p-4 rounded-md shadow-md w-1/3">
+          <h3 className="font-bold mb-2">Done</h3>
+          {done.map((task) => (
+            <div key={task.id} className="mb-2 p-2 bg-sky-100 rounded">
+              <p>{task.title}</p>
+              <button
+                className="text-sm text-blue-600 underline"
+                onClick={() => moveTask(task.id, "TO_DO")}
+              >
+                Move back to To Do
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
-};
-
+}
 
 export default KanbanBoard;

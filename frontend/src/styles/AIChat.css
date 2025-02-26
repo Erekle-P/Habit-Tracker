@@ -1,17 +1,23 @@
-.chat-container {
-    text-align: center;
-    padding: 20px;
-  }
-  
-  .chat-container input {
-    padding: 10px;
-    margin-right: 10px;
-  }
-  
-  .chat-container button {
-    padding: 10px;
-    background: #007bff;
-    color: white;
-    border: none;
-  }
-  
+/* src/styles/AIChat.css */
+
+.ai-chat {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.ai-chat input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.ai-chat button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 8px;
+}

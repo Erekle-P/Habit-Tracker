@@ -1,23 +1,58 @@
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    padding: 15px 30px;
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .navbar ul {
-    list-style: none;
-    display: flex;
-  }
-  
-  .navbar ul li {
-    margin-left: 20px;
-  }
-  
-  .navbar a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
+/* src/styles/Navbar.css */
+
+/* Emulate Tailwind class names in normal CSS */
+
+/* Layout classes */
+.flex {
+  display: flex;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.items-center {
+  align-items: center;
+}
+.gap-4 > * + * {
+  /* "gap" of ~1rem between child elements */
+  margin-left: 1rem;
+}
+
+/* Spacing classes */
+.p-4 {
+  padding: 1rem;
+}
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+.py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+/* Color / text classes */
+.bg-blue-600 {
+  background-color: #007bff; /* approximate 'blue-600' */
+}
+.text-white {
+  color: #fff;
+}
+.text-blue-600 {
+  color: #007bff;
+}
+
+/* Typography classes */
+.text-xl {
+  font-size: 1.25rem;
+}
+.font-bold {
+  font-weight: bold;
+}
+
+/* Misc classes */
+.bg-white {
+  background-color: #fff;
+}
+.rounded {
+  border-radius: 0.25rem;
+}

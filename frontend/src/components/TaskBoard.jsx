@@ -1,24 +1,24 @@
+import "react";
+import PropTypes from "prop-types";
 import TaskCard from "./TaskCard";
-import "../styles/TaskBoard.css";
 
-const TaskBoard = () => {
+const TaskBoard = ({ tasks = [] }) => {
   return (
     <div className="task-board">
-      <div className="column">
-        <h3>To Do</h3>
-        <TaskCard title="Design UI" status="To Do" />
-        <TaskCard title="Fix Bugs" status="To Do" />
-      </div>
-      <div className="column">
-        <h3>In Progress</h3>
-        <TaskCard title="Develop API" status="In Progress" />
-      </div>
-      <div className="column">
-        <h3>Completed</h3>
-        <TaskCard title="Database Setup" status="Completed" />
-      </div>
+      {tasks.length > 0 ? (
+        tasks.map((task) => (
+          <TaskCard key={task.id} task={task} status={task.status} />
+        ))
+      ) : (
+        <p>No tasks available</p> // ✅ Prevents crashing if tasks is empty or undefined
+      )}
     </div>
   );
+};
+
+// ✅ Add PropTypes for validation
+TaskBoard.propTypes = {
+  tasks: PropTypes.array, // Ensure tasks is an array
 };
 
 export default TaskBoard;
