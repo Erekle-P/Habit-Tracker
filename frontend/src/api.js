@@ -20,7 +20,7 @@ export const loginUser = async (username, password) => {
 
 export const logoutUser = async (refreshToken) => {
   const { data } = await api.post("/logout/", { refresh: refreshToken });
-  return data; // { message: "..."}
+  return data;
 };
 
 // HABITS
@@ -40,6 +40,13 @@ export const createHabit = async (habit, accessToken) => {
 
 export const updateHabit = async (habitId, updates, accessToken) => {
   const { data } = await api.patch(`/habits/${habitId}/`, updates, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  return data;
+};
+
+export const deleteHabit = async (habitId, accessToken) => {
+  const { data } = await api.delete(`/habits/${habitId}/`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
   return data;
@@ -67,6 +74,13 @@ export const updateTask = async (taskId, updates, accessToken) => {
   return data;
 };
 
+export const deleteTask = async (taskId, accessToken) => {
+  const { data } = await api.delete(`/tasks/${taskId}/`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  return data;
+};
+
 // AI
 export const chatWithAI = async (prompt, accessToken) => {
   const { data } = await api.post("/chat/", { prompt }, {
@@ -76,7 +90,6 @@ export const chatWithAI = async (prompt, accessToken) => {
 };
 
 export const sortAll = async (accessToken) => {
-  // merges habits & tasks in the backend, returns a sorted list
   const { data } = await api.post("/ai-sort/", {}, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
