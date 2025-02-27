@@ -1,10 +1,11 @@
 import "react";
 import AIChat from "../components/AIChat";
+import "../styles/ChatPage.css";
 
 function ChatPage() {
   return (
-    <div className="p-6 text-center">
-      <h2 className="text-xl mb-4">💬 AI Chat Assistant</h2>
+    <div className="chat-page">
+      <h2>💬 AI Chat Assistant</h2>
       <AIChat />
     </div>
   );

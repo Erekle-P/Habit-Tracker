@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { chatWithAI, sortAll } from "../api";
 
-
 function AIChat() {
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState("");
@@ -12,6 +11,7 @@ function AIChat() {
       const token = localStorage.getItem("accessToken");
       const data = await chatWithAI(prompt, token);
       setResponse(data.response);
+      setPrompt(""); // Clear input after sending
     } catch (err) {
       console.error("Chat error:", err);
       setResponse("Error contacting AI");
@@ -44,27 +44,23 @@ function AIChat() {
           Send
         </button>
       </div>
-
       {response && (
         <div className="mb-4 bg-white p-2 rounded shadow">
           <p className="text-gray-800">AI Response: {response}</p>
         </div>
       )}
-
       <button onClick={handleSort} className="bg-green-500 text-white px-4 py-2 rounded">
         Sort All (Habits & Tasks)
       </button>
-
       {sorted.length > 0 && (
         <div className="mt-4 bg-white p-2 rounded shadow">
           <h3 className="font-bold mb-2">AI-Sorted Items</h3>
           {sorted.map((item, idx) => (
             <div key={idx} className="mb-2 p-2 bg-sky-100 rounded">
-              <strong>{item.title}</strong> 
+              <strong>{item.title}</strong>
               {item.type === "habit"
                 ? ` (Habit, freq=${item.frequency})`
-                : ` (Task, deadline=${item.deadline || "N/A"}, importance=${item.importance || 1})`
-              }
+                : ` (Task, deadline=${item.deadline || "N/A"}, importance=${item.importance || 1})`}
               <p>{item.description}</p>
             </div>
           ))}

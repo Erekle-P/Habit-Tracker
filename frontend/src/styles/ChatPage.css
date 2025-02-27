@@ -1,5 +1,42 @@
+/* ChatPage.css */
+
+/* Main container for the ChatPage */
 .chat-page {
-    text-align: center;
-    padding: 20px;
+  background: linear-gradient(135deg, #cbefff, #f7fbff); /* Soft blue gradient */
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 30px auto;
+  text-align: center;
+}
+
+/* Header styling for the chat page */
+.chat-page h2 {
+  font-family: 'Poppins', sans-serif;  /* Or you can use Inter or Roboto */
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #007bff;  /* Accent blue */
+}
+
+/* Optional: Style for the inner chat container if wrapped in a specific element */
+.chat-page .chat-container {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  text-align: left;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* Responsive adjustments for mobile devices */
+@media (max-width: 600px) {
+  .chat-page {
+    padding: 15px;
+    margin: 15px;
   }
-  
+  .chat-page h2 {
+    font-size: 1.5rem;
+  }
+}
