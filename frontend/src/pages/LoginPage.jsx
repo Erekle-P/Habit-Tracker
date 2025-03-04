@@ -1,3 +1,5 @@
+// LoginPage.jsx
+
 import { useState } from "react";
 import { loginUser } from "../api";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +15,10 @@ function LoginPage() {
       const { access, refresh } = await loginUser(username, password);
       localStorage.setItem("accessToken", access);
       localStorage.setItem("refreshToken", refresh);
+
+      // ADDED: Store the username in localStorage
+      localStorage.setItem("username", username);
+
       navigate("/");
     } catch (err) {
       console.error("Login failed:", err);

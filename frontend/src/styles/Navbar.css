@@ -56,3 +56,16 @@
 .rounded {
   border-radius: 0.25rem;
 }
+
+/* index.css or Navbar.css */
+
+.logout-button {
+  background-color: #83d8f9;
+  color: #007bff; /* your accent-blue color */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark .logout-button {
+  background-color: #848080; /* dark grey */
+  color: #f1f1f1; /* light text color */
+}

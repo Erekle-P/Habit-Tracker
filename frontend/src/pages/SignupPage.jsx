@@ -1,5 +1,7 @@
+// SignupPage.jsx
+
 import { useState } from "react";
-import { signupUser, loginUser } from "../api"; // Added loginUser import
+import { signupUser, loginUser } from "../api";
 import { useNavigate } from "react-router-dom";
 
 function SignupPage() {
@@ -16,6 +18,10 @@ function SignupPage() {
       const { access, refresh } = await loginUser(username, password);
       localStorage.setItem("accessToken", access);
       localStorage.setItem("refreshToken", refresh);
+
+      // ADDED: Store the username in localStorage
+      localStorage.setItem("username", username);
+
       alert("Signup and login successful!");
       navigate("/"); // Redirect directly to the dashboard
     } catch (err) {

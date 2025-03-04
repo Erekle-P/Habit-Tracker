@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+// HabitsPage.jsx
+import  { useEffect, useState } from "react";
 import { getHabits } from "../api";
 import HabitCard from "../components/HabitCard";
 
@@ -23,9 +24,18 @@ function HabitsPage() {
     <div className="p-6 text-center">
       <h2 className="text-2xl font-bold mb-4">Your Habits</h2>
       <div className="flex flex-wrap gap-4 justify-center">
-        {habits.map((habit) => (
-          <HabitCard key={habit.id} habit={habit} refreshHabits={loadHabits} />
-        ))}
+        {habits.length === 0 ? (
+          // ADDED: Show message if no habits
+          <p>No habits yet.</p>
+        ) : (
+          habits.map((habit) => (
+            <HabitCard
+              key={habit.id}
+              habit={habit}
+              refreshHabits={loadHabits}
+            />
+          ))
+        )}
       </div>
     </div>
   );

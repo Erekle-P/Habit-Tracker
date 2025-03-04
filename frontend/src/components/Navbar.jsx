@@ -1,3 +1,5 @@
+// Navbar.jsx
+
 import { Link, useNavigate } from "react-router-dom";
 import { logoutUser } from "../api";
 import NotificationBar from "./NotificationBar";
@@ -6,6 +8,9 @@ import "../styles/Navbar.css";
 function Navbar() {
   const navigate = useNavigate();
   const isAuthenticated = !!localStorage.getItem("accessToken");
+
+  // ADDED: Get the username from localStorage
+  const userName = localStorage.getItem("username") || "User";
 
   const handleLogout = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
@@ -18,6 +23,7 @@ function Navbar() {
     }
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    localStorage.removeItem("username"); // clear out the username
     navigate("/login");
   };
 
@@ -29,7 +35,6 @@ function Navbar() {
     <>
       <NotificationBar />
       <nav className="flex justify-between items-center p-4 bg-accent-blue text-white">
-        {/* Make the brand title a clickable link */}
         <Link to="/" className="text-xl font-bold">
           Habit Tracker 📋
         </Link>
@@ -42,10 +47,12 @@ function Navbar() {
               <li><Link to="/calendar">Calendar 🗓️</Link></li>
               <li><Link to="/kanban">Kanban 📌</Link></li>
               <li><Link to="/chat">AI Chat 🤖</Link></li>
-              <li><Link to="/settings">Settings ⚙️</Link></li>
+              {/*<li><Link to="/settings">Settings ⚙️</Link></li>*/}
+
+              {/* ADDED: Show "Hi, <username>" in the logout button */}
               <li>
-                <button onClick={handleLogout} className="bg-white text-accent-blue px-3 py-1 rounded">
-                  Logout 🔓
+                <button onClick={handleLogout} className="logout-button px-3 py-1 rounded">
+                  Hi, {userName}! 🔓
                 </button>
               </li>
             </>
