@@ -1,4 +1,3 @@
-
 import { Link, useNavigate } from "react-router-dom";
 import { logoutUser } from "../api";
 import NotificationBar from "./NotificationBar";
@@ -30,7 +29,10 @@ function Navbar() {
     <>
       <NotificationBar />
       <nav className="flex justify-between items-center p-4 bg-accent-blue text-white">
-        <h1 className="text-xl font-bold">Habit Tracker 📋</h1>
+        {/* Make the brand title a clickable link */}
+        <Link to="/" className="text-xl font-bold">
+          Habit Tracker 📋
+        </Link>
         <ul className="flex gap-4 flex-wrap">
           {isAuthenticated ? (
             <>

@@ -1,3 +1,5 @@
+/* index.css */
+
 /* Add this in index.html inside <head>:
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 */
@@ -15,8 +17,8 @@
 
   /* Dark Mode Colors */
   --bg-color-dark: #2d2d2d;   /* dark grey */
-  --paper-bg-dark: #3a3a3a;   /* light grey */
-  --text-color-dark: #f1f1f1;
+  --paper-bg-dark: #3a3a3a;   /* slightly lighter grey */
+  --text-color-dark: #f14c10;
   --accent-dark: #999999;
 }
 
@@ -41,6 +43,11 @@ body.dark {
   color: var(--text-color-dark);
 }
 
+/* ADDED: Override navbar background color in dark mode */
+body.dark .bg-accent-blue {
+  background-color: #444 !important; /* grey navbar in dark mode */
+}
+
 /* Paper style */
 .paper {
   background-color: var(--paper-bg-light);
@@ -52,6 +59,7 @@ body.dark {
 }
 body.dark .paper {
   background-color: var(--paper-bg-dark);
+  color: var(--text-color-dark);
 }
 
 /* Navbar colors: you can use the accent colors */

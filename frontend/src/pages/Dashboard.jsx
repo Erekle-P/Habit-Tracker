@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+// src/pages/Dashboard.jsx
+import { useState, useEffect } from "react";
 import { getHabits, createHabit, createTask } from "../api";
-// If you have separate pages for edit/delete, those components (HabitCard, TaskCard) can be used there.
- 
+import paperImage from "../pic/paper.png";
+import officeDesk from "../pic/office-desk.jpg"; // ADDED: for not-logged-in background
+
 function Dashboard() {
   // Quick add inputs
   const [habitTitle, setHabitTitle] = useState("");
@@ -9,10 +11,31 @@ function Dashboard() {
   const [habitTime, setHabitTime] = useState("");
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDeadline, setTaskDeadline] = useState("");
-  
+
   // Daily habits overview (checklist)
   const [dailyHabits, setDailyHabits] = useState([]);
+
+  // Retrieve auth token
   const accessToken = localStorage.getItem("accessToken");
+
+  // ADDED: local state for showing a dog GIF after creation
+  const [gifUrl, setGifUrl] = useState(null);
+
+  useEffect(() => {
+    if (accessToken) {
+      loadHabits();
+    }
+  }, [accessToken]);
+
+  // ADDED: auto-hide the GIF after 3 seconds
+  useEffect(() => {
+    if (gifUrl) {
+      const timer = setTimeout(() => {
+        setGifUrl(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [gifUrl]);
 
   const loadHabits = async () => {
     try {
@@ -25,10 +48,6 @@ function Dashboard() {
     }
   };
 
-  useEffect(() => {
-    loadHabits();
-  }, [accessToken]);
-
   const handleCreateHabit = async () => {
     try {
       const payload = {
@@ -38,6 +57,10 @@ function Dashboard() {
       };
       await createHabit(payload, accessToken);
       alert("Habit created!");
+
+      // ADDED: Show dog GIF
+      setGifUrl("/src/pic/good-dog.gif");
+
       setHabitTitle("");
       setHabitTime("");
       loadHabits(); // Refresh habits list
@@ -54,6 +77,10 @@ function Dashboard() {
       };
       await createTask(payload, accessToken);
       alert("Note created!");
+
+      // ADDED: Show dog GIF
+      setGifUrl("/src/pic/good-dog.gif");
+
       setTaskTitle("");
       setTaskDeadline("");
     } catch (err) {
@@ -61,13 +88,62 @@ function Dashboard() {
     }
   };
 
+  // ADDED: If user is not logged in, show office desk background + message
+  if (!accessToken) {
+    return (
+      <div
+        style={{
+          backgroundImage: `url(${officeDesk})`,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          minHeight: "100vh",
+          width: "100%",
+        }}
+      >
+        <div className="p-6 text-center">
+          <h2 className="text-2xl font-bold mb-4">Please login in order to see your Habits/Notes</h2>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="p-6 text-center">
-      <div className="paper">
+    <div
+      // Full-page background
+      style={{
+        backgroundImage: `url(${paperImage})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        minHeight: "100vh",
+        width: "100%",
+      }}
+    >
+      <div className="p-6 text-center">
         <h2 className="text-2xl font-bold mb-4">Welcome to Your Dashboard</h2>
-        
-        {/* Overview of Daily Habits */}
-        <div className="mb-6">
+
+        {/* ADDED: Show dog GIF if available */}
+        {gifUrl && (
+          <div className="mb-4">
+            <img
+              src={gifUrl}
+              alt="Dog celebration"
+              style={{ margin: "0 auto", maxHeight: "200px" }}
+            />
+          </div>
+        )}
+
+        {/* Highlighted container for Daily Habits */}
+        <div
+          style={{
+            backgroundColor: "rgba(237, 63, 63, 0.4)",
+            borderRadius: "8px",
+            padding: "20px",
+            marginBottom: "20px",
+            boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+          }}
+        >
           <h3 className="text-lg font-bold mb-2">Overview of Daily Habits 📊</h3>
           {dailyHabits.length === 0 ? (
             <p>No daily habits yet.</p>
@@ -75,14 +151,14 @@ function Dashboard() {
             <ul className="text-left">
               {dailyHabits.map((habit) => (
                 <li key={habit.id} className="flex items-center space-x-2">
-                  <input type="checkbox" /> {/* This is just UI; you may later hook it to an update */}
+                  <input type="checkbox" />
                   <span>{habit.title}</span>
                 </li>
               ))}
             </ul>
           )}
         </div>
-        
+
         {/* Quick Add Habit & Notes */}
         <div className="mb-6">
           <h3 className="text-lg font-bold mb-2">Quick Add Habit &amp; Notes ➕</h3>
@@ -111,7 +187,10 @@ function Dashboard() {
                 className="p-2 border rounded w-64"
                 placeholder="Preferred Time"
               />
-              <button onClick={handleCreateHabit} className="bg-green-600 text-white px-4 py-2 rounded w-64">
+              <button
+                onClick={handleCreateHabit}
+                className="bg-green-600 text-white px-4 py-2 rounded w-64"
+              >
                 Create Habit
               </button>
             </div>
@@ -129,7 +208,10 @@ function Dashboard() {
                 onChange={(e) => setTaskDeadline(e.target.value)}
                 className="p-2 border rounded w-64"
               />
-              <button onClick={handleCreateTask} className="bg-blue-600 text-white px-4 py-2 rounded w-64">
+              <button
+                onClick={handleCreateTask}
+                className="bg-blue-600 text-white px-4 py-2 rounded w-64"
+              >
                 Create Note
               </button>
             </div>
