@@ -9,7 +9,6 @@ from datetime import timedelta
 from corsheaders.defaults import default_headers
 import dj_database_url
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load environment variables
@@ -23,8 +22,7 @@ ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vite
-   
-    "http://127.0.0.1:5173",  # ADDED: for Vite if you use 127.0.0.1
+    "http://127.0.0.1:5173",  # for Vite if you use 127.0.0.1
     "http://localhost:8000",  # if your frontend is served from localhost:8000
     "http://127.0.0.1:8000",  # if your frontend or dev server uses 127.0.0.1:8000
 ]
@@ -68,6 +66,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  # For AI Chat & Sorting
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # Added for static file serving
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -113,10 +112,16 @@ AUTH_PASSWORD_VALIDATORS = [
 # Static files settings
 STATIC_URL = "/assets/"
 
-# Corrected static files directory: should point to <project-root>/static/assets
+# The directory with your built static assets from Vite
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static", "assets"),
 ]
+
+# Define STATIC_ROOT so that collectstatic gathers files here in production
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+# Configure WhiteNoise for better static file handling (compression and caching)
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Internationalization
 LANGUAGE_CODE = "en-us"

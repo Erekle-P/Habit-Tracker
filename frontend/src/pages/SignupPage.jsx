@@ -14,14 +14,12 @@ function SignupPage() {
     try {
       // Create a new user account
       await signupUser(username, password);
-      // Automatically log in the user after successful signup
+      // Automatically log in the user after a successful signup
       const { access, refresh } = await loginUser(username, password);
       localStorage.setItem("accessToken", access);
       localStorage.setItem("refreshToken", refresh);
-
-      // ADDED: Store the username in localStorage
+      // Store the username for display purposes
       localStorage.setItem("username", username);
-
       alert("Signup and login successful!");
       navigate("/"); // Redirect directly to the dashboard
     } catch (err) {

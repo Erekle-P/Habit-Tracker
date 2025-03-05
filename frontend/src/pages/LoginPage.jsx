@@ -15,10 +15,8 @@ function LoginPage() {
       const { access, refresh } = await loginUser(username, password);
       localStorage.setItem("accessToken", access);
       localStorage.setItem("refreshToken", refresh);
-
-      // ADDED: Store the username in localStorage
+      // Store the username for display in the navbar
       localStorage.setItem("username", username);
-
       navigate("/");
     } catch (err) {
       console.error("Login failed:", err);

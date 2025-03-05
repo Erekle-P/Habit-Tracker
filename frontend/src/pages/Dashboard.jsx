@@ -3,33 +3,35 @@ import { useState, useEffect } from "react";
 import { getHabits, createHabit, createTask } from "../api";
 import paperImage from "../pic/paper.png";
 import officeDesk from "../pic/office-desk.jpg";
-import goodDogGif from "../pic/good-dog.gif";  // New import for the dog GIF
+import goodDogGif from "../pic/good-dog.gif"; // Import for the dog GIF
 
 function Dashboard() {
-  // Quick add inputs
+  // Quick add form state for Habit
   const [habitTitle, setHabitTitle] = useState("");
   const [habitFreq, setHabitFreq] = useState("DAILY");
   const [habitTime, setHabitTime] = useState("");
+
+  // Quick add form state for Task (Note)
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDeadline, setTaskDeadline] = useState("");
 
-  // Daily habits overview (checklist)
+  // State for storing daily habits (used for overview)
   const [dailyHabits, setDailyHabits] = useState([]);
 
-  // Retrieve auth token
+  // Retrieve the JWT access token from localStorage (used to authenticate API calls)
   const accessToken = localStorage.getItem("accessToken");
 
-  // State for showing a dog GIF after creation
+  // State for showing a dog GIF after creating a habit or note
   const [gifUrl, setGifUrl] = useState(null);
 
-  // Load daily habits when logged in
+  // Load daily habits when the user is logged in (accessToken exists)
   useEffect(() => {
     if (accessToken) {
       loadHabits();
     }
   }, [accessToken]);
 
-  // Auto-hide the dog GIF after 3 seconds
+  // Auto-hide the dog GIF after 3 seconds if it's displayed
   useEffect(() => {
     if (gifUrl) {
       const timer = setTimeout(() => {
@@ -39,9 +41,11 @@ function Dashboard() {
     }
   }, [gifUrl]);
 
+  // Function to fetch habits from the backend and filter for daily habits
   const loadHabits = async () => {
     try {
       const habits = await getHabits(accessToken);
+      // Filter habits that have a daily frequency
       const daily = habits.filter((h) => h.frequency === "DAILY");
       setDailyHabits(daily);
     } catch (err) {
@@ -49,43 +53,47 @@ function Dashboard() {
     }
   };
 
+  // Function to handle creation of a new habit
   const handleCreateHabit = async () => {
     try {
       const payload = {
         title: habitTitle,
         frequency: habitFreq,
+        // If habitTime is empty, set it to null so backend handles it appropriately
         preferred_time: habitTime.trim() === "" ? null : habitTime,
       };
       await createHabit(payload, accessToken);
       alert("Habit created!");
 
-      // Show dog GIF (using imported image)
+      // Display the dog GIF as a success indicator
       setGifUrl(goodDogGif);
 
-      // Reset fields
+      // Reset habit input fields
       setHabitTitle("");
       setHabitTime("");
 
-      // Refresh habits
+      // Refresh the habits list to include the new habit
       loadHabits();
     } catch (err) {
       console.error("Failed to create habit:", err);
     }
   };
 
+  // Function to handle creation of a new task/note
   const handleCreateTask = async () => {
     try {
       const payload = {
         title: taskTitle,
+        // If taskDeadline is empty, set it to null so backend handles it appropriately
         deadline: taskDeadline.trim() === "" ? null : taskDeadline,
       };
       await createTask(payload, accessToken);
       alert("Note created!");
 
-      // Show dog GIF (using imported image)
+      // Display the dog GIF as a success indicator
       setGifUrl(goodDogGif);
 
-      // Reset fields
+      // Reset task input fields
       setTaskTitle("");
       setTaskDeadline("");
     } catch (err) {
@@ -93,7 +101,7 @@ function Dashboard() {
     }
   };
 
-  // If user is not logged in, show office-desk background + message
+  // If no user is logged in (accessToken is missing), show a login reminder with office background
   if (!accessToken) {
     return (
       <div
@@ -115,6 +123,7 @@ function Dashboard() {
     );
   }
 
+  // Main Dashboard view for logged in users
   return (
     <div
       style={{
@@ -129,7 +138,7 @@ function Dashboard() {
       <div className="p-6 text-center">
         <h2 className="text-2xl font-bold mb-4">Welcome to Your Dashboard</h2>
 
-        {/* Show dog GIF if available */}
+        {/* Display dog GIF as a celebration for successful creation */}
         {gifUrl && (
           <div className="mb-4">
             <img
@@ -140,7 +149,7 @@ function Dashboard() {
           </div>
         )}
 
-        {/* Highlighted container for Daily Habits */}
+        {/* Daily Habits Overview Section */}
         <div
           style={{
             backgroundColor: "rgba(237, 63, 63, 0.4)",
@@ -165,11 +174,11 @@ function Dashboard() {
           )}
         </div>
 
-        {/* Quick Add Habit & Notes */}
+        {/* Quick Add Habit & Notes Section */}
         <div className="mb-6">
           <h3 className="text-lg font-bold mb-2">Quick Add Habit &amp; Notes ➕</h3>
 
-          {/* A flex container with bigger gap, translucent backgrounds, neon hover glow, and centered content */}
+          {/* Flex container for side-by-side forms */}
           <div className="flex flex-row gap-16 justify-center">
             {/* Habit Form */}
             <div

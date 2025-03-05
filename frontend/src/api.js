@@ -7,7 +7,28 @@ const api = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-// AUTH
+// Add an interceptor to log unauthorized responses (status code 401)
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      console.error("Received 401 Unauthorized response from API");
+      // Optionally, you could add logic here to refresh the token or redirect to login.
+    }
+    return Promise.reject(error);
+  }
+);
+
+// Helper to ensure that an access token is provided for protected calls.
+const ensureToken = (accessToken) => {
+  if (!accessToken) {
+    throw new Error("Missing access token. Please login first.");
+  }
+};
+
+// --------------------
+// Authentication Endpoints
+// --------------------
 export const signupUser = async (username, password) => {
   const { data } = await api.post("/signup/", { username, password });
   return data;
@@ -23,8 +44,11 @@ export const logoutUser = async (refreshToken) => {
   return data;
 };
 
-// HABITS
+// --------------------
+// Habits Endpoints
+// --------------------
 export const getHabits = async (accessToken) => {
+  ensureToken(accessToken);
   const { data } = await api.get("/habits/", {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
@@ -32,6 +56,7 @@ export const getHabits = async (accessToken) => {
 };
 
 export const createHabit = async (habit, accessToken) => {
+  ensureToken(accessToken);
   const { data } = await api.post("/habits/", habit, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
@@ -39,6 +64,7 @@ export const createHabit = async (habit, accessToken) => {
 };
 
 export const updateHabit = async (habitId, updates, accessToken) => {
+  ensureToken(accessToken);
   const { data } = await api.patch(`/habits/${habitId}/`, updates, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
@@ -46,14 +72,18 @@ export const updateHabit = async (habitId, updates, accessToken) => {
 };
 
 export const deleteHabit = async (habitId, accessToken) => {
+  ensureToken(accessToken);
   const { data } = await api.delete(`/habits/${habitId}/`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
   return data;
 };
 
-// TASKS
+// --------------------
+// Tasks Endpoints
+// --------------------
 export const getTasks = async (accessToken) => {
+  ensureToken(accessToken);
   const { data } = await api.get("/tasks/", {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
@@ -61,6 +91,7 @@ export const getTasks = async (accessToken) => {
 };
 
 export const createTask = async (task, accessToken) => {
+  ensureToken(accessToken);
   const { data } = await api.post("/tasks/", task, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
@@ -68,6 +99,7 @@ export const createTask = async (task, accessToken) => {
 };
 
 export const updateTask = async (taskId, updates, accessToken) => {
+  ensureToken(accessToken);
   const { data } = await api.patch(`/tasks/${taskId}/`, updates, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
@@ -75,14 +107,18 @@ export const updateTask = async (taskId, updates, accessToken) => {
 };
 
 export const deleteTask = async (taskId, accessToken) => {
+  ensureToken(accessToken);
   const { data } = await api.delete(`/tasks/${taskId}/`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
   return data;
 };
 
-// AI
+// --------------------
+// AI Endpoints
+// --------------------
 export const chatWithAI = async (prompt, accessToken) => {
+  ensureToken(accessToken);
   const { data } = await api.post("/chat/", { prompt }, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
@@ -90,6 +126,7 @@ export const chatWithAI = async (prompt, accessToken) => {
 };
 
 export const sortAll = async (accessToken) => {
+  ensureToken(accessToken);
   const { data } = await api.post("/ai-sort/", {}, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
