@@ -17,7 +17,7 @@ load_dotenv(env_path)
 
 SECRET_KEY = os.getenv("SECRET_KEY", "replace-me-with-a-secret-key")
 DEBUG = True
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", 'habit-tracker-3-v89p.onrender.com']
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
