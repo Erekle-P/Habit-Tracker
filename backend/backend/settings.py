@@ -25,6 +25,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",  # for Vite if you use 127.0.0.1
     "http://localhost:8000",  # if your frontend is served from localhost:8000
     "http://127.0.0.1:8000",  # if your frontend or dev server uses 127.0.0.1:8000
+    "https://habit-tracker-3-v89p.onrender.com"
 ]
 CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
 CORS_ALLOW_HEADERS = list(default_headers) + ["Authorization", "Content-Type"]
