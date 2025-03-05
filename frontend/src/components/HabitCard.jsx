@@ -1,3 +1,4 @@
+// HabitCard.jsx
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { updateHabit, deleteHabit } from "../api";
@@ -7,12 +8,22 @@ function HabitCard({ habit, refreshHabits }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(habit.title);
   const [editedFreq, setEditedFreq] = useState(habit.frequency);
+  const [editedTime, setEditedTime] = useState(habit.preferred_time || ""); // ADDED
 
   const accessToken = localStorage.getItem("accessToken");
 
   const handleEdit = async () => {
     try {
-      await updateHabit(habit.id, { title: editedTitle, frequency: editedFreq }, accessToken);
+      // ADDED: include preferred_time in the update
+      await updateHabit(
+        habit.id,
+        {
+          title: editedTitle,
+          frequency: editedFreq,
+          preferred_time: editedTime.trim() === "" ? null : editedTime,
+        },
+        accessToken
+      );
       setIsEditing(false);
       if (refreshHabits) refreshHabits(); // refresh parent list after update
     } catch (err) {
@@ -50,6 +61,13 @@ function HabitCard({ habit, refreshHabits }) {
             <option value="WEEKLY">Weekly</option>
             <option value="MONTHLY">Monthly</option>
           </select>
+          {/* ADDED: Edit the habit's preferred_time */}
+          <input
+            type="time"
+            value={editedTime}
+            onChange={(e) => setEditedTime(e.target.value)}
+            className="border p-1 mb-1 w-full"
+          />
           <button onClick={handleEdit} className="bg-green-600 text-white px-2 py-1 rounded mr-1">
             Save
           </button>
@@ -61,6 +79,8 @@ function HabitCard({ habit, refreshHabits }) {
         <>
           <h4 className="font-bold mb-1">{habit.title}</h4>
           <p>Frequency: {habit.frequency}</p>
+          {/* ADDED: Show the time if available */}
+          <p>Preferred Time: {habit.preferred_time || "N/A"}</p>
           <p className="text-sm text-gray-500">{habit.description}</p>
           <div className="mt-2">
             <button onClick={() => setIsEditing(true)} className="bg-blue-600 text-white px-2 py-1 rounded mr-1">

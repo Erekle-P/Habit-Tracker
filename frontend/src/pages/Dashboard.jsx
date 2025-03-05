@@ -1,8 +1,9 @@
 // src/pages/Dashboard.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { getHabits, createHabit, createTask } from "../api";
 import paperImage from "../pic/paper.png";
 import officeDesk from "../pic/office-desk.jpg";
+import goodDogGif from "../pic/good-dog.gif";  // New import for the dog GIF
 
 function Dashboard() {
   // Quick add inputs
@@ -58,8 +59,8 @@ function Dashboard() {
       await createHabit(payload, accessToken);
       alert("Habit created!");
 
-      // Show dog GIF
-      setGifUrl("/src/pic/good-dog.gif");
+      // Show dog GIF (using imported image)
+      setGifUrl(goodDogGif);
 
       // Reset fields
       setHabitTitle("");
@@ -81,8 +82,8 @@ function Dashboard() {
       await createTask(payload, accessToken);
       alert("Note created!");
 
-      // Show dog GIF
-      setGifUrl("/src/pic/good-dog.gif");
+      // Show dog GIF (using imported image)
+      setGifUrl(goodDogGif);
 
       // Reset fields
       setTaskTitle("");

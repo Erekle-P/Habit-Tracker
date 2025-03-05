@@ -1,3 +1,4 @@
+// AIChat.jsx
 import { useState } from "react";
 import { chatWithAI, sortAll } from "../api";
 
@@ -30,6 +31,13 @@ function AIChat() {
     }
   };
 
+  // ADDED: Key press listener for Enter
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSend();
+    }
+  };
+
   return (
     <div className="ai-chat mx-auto max-w-md">
       <div className="mb-4">
@@ -37,6 +45,7 @@ function AIChat() {
           type="text"
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
+          onKeyDown={handleKeyDown} 
           placeholder="Ask AI..."
           className="border p-2 mr-2 w-2/3"
         />

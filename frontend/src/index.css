@@ -18,7 +18,7 @@
   /* Dark Mode Colors */
   --bg-color-dark: #2d2d2d;   /* dark grey */
   --paper-bg-dark: #3a3a3a;   /* slightly lighter grey */
-  --text-color-dark: #ec3a30;
+  --text-color-dark:rgb(41, 129, 237);
   --accent-dark: #999999;
 }
 

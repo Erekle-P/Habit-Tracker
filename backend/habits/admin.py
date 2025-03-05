@@ -1,9 +1,14 @@
-# from django.contrib import admin
-# from .models import Habit  # Import your Habit model
+# In habits/admin.py
 
-# @admin.register(Habit)
-# class HabitAdmin(admin.ModelAdmin):
-#     list_display = ('name', 'user', 'created_at', 'completed')  # Customize fields shown in the admin
-#     search_fields = ('name', 'user__username')  # Enable search by habit name and user
+from django.contrib import admin
+from .models import Habit
 
-# # If  have more models, register them here
+class HabitAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description', 'frequency')
+
+    def custom_completed(self, obj):
+        # Assuming 'completed' might be a computed value
+        return obj.completed_status  # or any logic you need
+    custom_completed.short_description = 'Completed'
+    
+admin.site.register(Habit, HabitAdmin)

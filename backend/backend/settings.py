@@ -1,13 +1,18 @@
 """
 Django settings for backend project.
 """
+
 import os
 from pathlib import Path
 from dotenv import load_dotenv
 from datetime import timedelta
 from corsheaders.defaults import default_headers
+import dj_database_url
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load environment variables
 env_path = os.path.join(BASE_DIR, ".env")
 load_dotenv(env_path)
 
@@ -15,34 +20,34 @@ SECRET_KEY = os.getenv("SECRET_KEY", "replace-me-with-a-secret-key")
 DEBUG = True
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
+# CORS settings
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vite
-    "http://localhost:3000",  # create-react-app, if used
+   
+    "http://127.0.0.1:5173",  # ADDED: for Vite if you use 127.0.0.1
+    "http://localhost:8000",  # if your frontend is served from localhost:8000
+    "http://127.0.0.1:8000",  # if your frontend or dev server uses 127.0.0.1:8000
 ]
 CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
-CORS_ALLOW_HEADERS = list(default_headers) + [
-    "Authorization",
-    "Content-Type",
-]
+CORS_ALLOW_HEADERS = list(default_headers) + ["Authorization", "Content-Type"]
 CORS_ALLOW_CREDENTIALS = True
 
+# Application definition
 INSTALLED_APPS = [
-    # Django
+    # Django apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
-    # 3rd-party
+    # Third-party apps
     "rest_framework",
     "rest_framework_simplejwt",
-    "rest_framework_simplejwt.token_blacklist",  # For token blacklisting
+    "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
-
-    # Local
-    "habits",  # Our single app with both Habit & Task
+    # Local apps
+    "habits",
 ]
 
 REST_FRAMEWORK = {
@@ -77,12 +82,13 @@ ROOT_URLCONF = "backend.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        # Update the path if your built frontend files (including index.html) are now in <project-root>/static/assets
+        "DIRS": [os.path.join(BASE_DIR, "static", "assets")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
-                "django.template.context_processors.request",
+                "django.template.context_processors.request",  # Required for admin sidebar
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
@@ -92,11 +98,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "backend.wsgi.application"
 
+# Database configuration using dj_database_url
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    "default": dj_database_url.config(default=os.getenv("DATABASE_URL"))
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -106,10 +110,18 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
+# Static files settings
+STATIC_URL = "/assets/"
+
+# Corrected static files directory: should point to <project-root>/static/assets
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static", "assets"),
+]
+
+# Internationalization
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

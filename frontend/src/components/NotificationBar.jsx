@@ -1,3 +1,4 @@
+// NotificationBar.jsx
 import { useEffect, useState } from "react";
 import { getTasks, getHabits } from "../api";
 
@@ -12,18 +13,21 @@ function NotificationBar() {
         const now = new Date();
         let newNotifications = [];
 
-        // Check for tasks with deadlines in the next hour
+        // Check for tasks with deadlines in the next 15 minutes
         tasks.forEach((t) => {
           if (t.deadline) {
             const deadline = new Date(t.deadline);
             const diffMinutes = (deadline - now) / (1000 * 60);
-            if (diffMinutes > 0 && diffMinutes <= 60) {
-              newNotifications.push(`Task "${t.title}" is due in ${Math.ceil(diffMinutes)} minute(s).`);
+            // ADJUSTED: Notify if within 15 minutes
+            if (diffMinutes > 0 && diffMinutes <= 15) {
+              newNotifications.push(
+                `Task "${t.title}" is due in ${Math.ceil(diffMinutes)} minute(s).`
+              );
             }
           }
         });
 
-        // Check for daily habits: if preferred_time is set and current time is within 10 minutes
+        // Check for daily habits: if preferred_time is set and current time is within 15 minutes
         habits.forEach((h) => {
           if (h.preferred_time) {
             // Build a date for today with the habit's preferred time
@@ -33,8 +37,9 @@ function NotificationBar() {
             habitTime.setMinutes(parseInt(minutes, 10));
             habitTime.setSeconds(0);
 
-            const diffMinutes = Math.abs((habitTime - now) / (1000 * 60));
-            if (diffMinutes <= 10) {
+            // ADJUSTED: Now 15 minutes threshold (instead of 10)
+            const diffMinutes = (habitTime - now) / (1000 * 60);
+            if (diffMinutes > 0 && diffMinutes <= 15) {
               newNotifications.push(`It's almost time for your habit "${h.title}".`);
             }
           }

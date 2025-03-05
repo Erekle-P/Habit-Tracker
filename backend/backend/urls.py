@@ -2,7 +2,9 @@
 URL configuration for backend project.
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
+from django.conf.urls.static import static
+from django.views.generic import TemplateView
 from rest_framework_simplejwt.views import TokenRefreshView
 from habits.views import (
     RegisterUserView,
@@ -15,6 +17,7 @@ from habits.views import (
     ChatWithAIView,
     SortAllView,  # Single endpoint to sort both habits & tasks
 )
+
 
 urlpatterns = [
     # Django Admin
@@ -37,4 +40,6 @@ urlpatterns = [
     # AI Chat & Sorting
     path("api/chat/", ChatWithAIView.as_view(), name="chat_with_ai"),
     path("api/ai-sort/", SortAllView.as_view(), name="sort_all"),
+    
+    re_path(r'^.*$', TemplateView.as_view(template_name="index.html")),
 ]

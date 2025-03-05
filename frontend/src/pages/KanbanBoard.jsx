@@ -1,18 +1,20 @@
 // src/pages/KanbanBoard.jsx
 import { useEffect, useState } from "react";
 import { getTasks, updateTask } from "../api";
+import workingDogGif from "../pic/working-dog.gif";  // Import for "in progress" transition
+import yeayDogGif from "../pic/yeay-dog.gif";          // Import for "done" transition
 
 function KanbanBoard() {
   const [tasks, setTasks] = useState([]);
 
-  // ADDED: local state to show dog GIF when status changes
+  // Local state to show dog GIF when status changes
   const [gifUrl, setGifUrl] = useState(null);
 
   useEffect(() => {
     fetchTasks();
   }, []);
 
-  // ADDED: auto-hide the GIF after 3 seconds
+  // Auto-hide the GIF after 3 seconds
   useEffect(() => {
     if (gifUrl) {
       const timer = setTimeout(() => {
@@ -39,11 +41,11 @@ function KanbanBoard() {
       if (taskToUpdate) {
         await updateTask(taskId, { status: newStatus }, accessToken);
 
-        // ADDED: check transitions to show dog GIF
+        // Check transitions to show dog GIF using the imported assets
         if (taskToUpdate.status === "TO_DO" && newStatus === "IN_PROGRESS") {
-          setGifUrl("/src/pic/working-dog.gif");
+          setGifUrl(workingDogGif);
         } else if (taskToUpdate.status === "IN_PROGRESS" && newStatus === "DONE") {
-          setGifUrl("/src/pic/yeay-dog.gif");
+          setGifUrl(yeayDogGif);
         }
 
         fetchTasks();
@@ -61,7 +63,7 @@ function KanbanBoard() {
     <div className="p-6">
       <h2 className="text-xl mb-4">📌 Kanban Board (Tasks)</h2>
 
-      {/* ADDED: Show dog GIF if available */}
+      {/* Show dog GIF if available */}
       {gifUrl && (
         <div className="mb-4 text-center">
           <img
