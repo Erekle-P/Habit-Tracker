@@ -30,6 +30,19 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         {/* <Route path="/settings" element={<SettingsPage />} /> */}
       </Routes>
+      
+      <footer
+        style={{
+          textAlign: "center",
+          padding: "10px",
+          background: "#f8f9fa",
+          position: "fixed",
+          bottom: 0,
+          width: "100%",
+        }}
+      >
+        © 2025 Erekle | All Rights Reserved
+      </footer>
     </DndProvider>
   );
 }
