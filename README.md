@@ -52,8 +52,9 @@ python app.py  # Flask
 
 ## 📸 Screenshots 
 
-![Screenshot 2025-03-05 162443](https://github.com/user-attachments/assets/835d1f8a-2848-41f4-acfb-eb2b705dc594)
 ![Screenshot 2025-03-05 162239](https://github.com/user-attachments/assets/5ed1fb5e-7ca6-42d7-91ea-1a882c2fbb03)
+![Screenshot 2025-03-05 162443](https://github.com/user-attachments/assets/835d1f8a-2848-41f4-acfb-eb2b705dc594)
+
 
 ## 📌 Future Improvements
 - 📊 **Progress Reports:** Weekly/monthly summaries
